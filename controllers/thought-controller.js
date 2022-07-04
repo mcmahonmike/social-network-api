@@ -1,5 +1,6 @@
 const { Thought, User } = require('../models');
 
+
 const thoughtController = {
     // get all thoughts
     getAllThought(req, res) {
@@ -73,6 +74,17 @@ const thoughtController = {
         )
     .then(dbAthoughtData => res.json(dbAthoughtData))
     .catch(err => res.status(400).json(err));
+  },
+
+  //delete reaction
+  deleteReaction({ params, body }, res) {
+    Thought.findOneAndUpdate(
+        { _id: params.thoughtId },
+        {$pull: { reactions:{ reactionId: params.reactionId} } },
+        {new: true}
+        )
+    .then(dbAthoughtData => res.json(dbAthoughtData))
+    .catch(err => res.json(err));
   },
 }
   module.exports = thoughtController;

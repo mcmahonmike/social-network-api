@@ -9,6 +9,7 @@ const ReactionSchema = new Schema({
     reactionBody: {
         type: String,
         required: true,
+        minLength: 1,
         maxLength: 280
     },
     username: {
@@ -19,14 +20,15 @@ const ReactionSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: createdAtVal => dateFormat(createdAtVal)
+        // get: createdAtVal => dateFormat(createdAtVal)
       }
     },
     {
       toJSON: {
         getters: true,
         virtuals: true
-      }
+      },
+      id: false
     }
     );
 
@@ -48,10 +50,16 @@ const ThoughtSchema = new Schema({
         },
         reactions: [ReactionSchema]
     
-    });
+    },
+    {
+        toJSON: {
+            virtuals: true,
+            getters: true
+        },
+        id: false
+    }
+    );
 
-    
-      // get total count of comments and replies on retrieval
       ThoughtSchema.virtual('reactionCount').get(function() {
         return this.reactions.length;
         });
